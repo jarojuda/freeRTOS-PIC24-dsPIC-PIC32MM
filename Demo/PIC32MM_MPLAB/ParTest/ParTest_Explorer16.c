@@ -73,76 +73,68 @@
 /* Demo app includes. */
 #include "partest.h"
 
-#define ptOUTPUT 	0
-#define ptALL_OFF	0
-#define mainCHECK_LED 10
 
-/*-----------------------------------------------------------
- * Simple parallel port IO routines.
- *-----------------------------------------------------------*/
+void vParTestInitialise(void) {
 
-void vParTestInitialise( void )
-{
-	/* All LEDs output. */	
-	TRISD = ptOUTPUT;	
-    TRISC = ptOUTPUT;
-	PORTD = ptALL_OFF;
+    TRISDbits.TRISD1 = 0;
+    TRISDbits.TRISD3 = 0;
+    TRISCbits.TRISC3 = 0;
+    TRISCbits.TRISC13 = 0;
+    TRISCbits.TRISC15 = 0;
+
 }
+
 /*-----------------------------------------------------------*/
 
-void vParTestSetLED( unsigned portBASE_TYPE uxLED, signed portBASE_TYPE xValue )
-{
-unsigned portBASE_TYPE uxLEDBit;
+void vParTestSetLED( UBaseType_t uxLED, BaseType_t xValue ){
 
-	if( xValue )
-	{
-		/* Turn the LED on.   Use of the PORTASET register removes the need
-		to use a critical section. */
-        if(uxLED == mainCHECK_LED)
-        {
-          uxLEDBit = 8 << uxLED;
-          LATCSET = uxLEDBit;    
-        }
-        else
-        {
-          uxLEDBit = 1 << uxLED;
-		  LATDSET = uxLEDBit;
-        }
-	}
-	else
-	{
-		/* Turn the LED off.  Use of the PORTACLR register removes the need
-		to use a critical section. */
-         if(uxLED == mainCHECK_LED)
-         {
-           uxLEDBit = 8 << uxLED;
-           LATCCLR = uxLEDBit;   
-         }
-         else
-         {
-           uxLEDBit = 1 << uxLED;
-		   LATDCLR = uxLEDBit;
-         }
-	}
+
+    switch (uxLED) {
+        case 0:
+            LATDbits.LATD1 = xValue;
+            break;
+        case 1:
+            LATDbits.LATD3 = xValue;
+            break;
+        case 2:
+            LATCbits.LATC3 = xValue;
+            break;
+        case 3:
+            LATCbits.LATC13 = xValue;
+            break;
+        case 4:
+            LATCbits.LATC15 = xValue;
+            break;
+        default:
+            break;
+    }
 }
+
 /*-----------------------------------------------------------*/
 
-void vParTestToggleLED( unsigned portBASE_TYPE uxLED )
-{
-    unsigned portBASE_TYPE uxLEDBit;
-	
-	/* Use of the PORTAINV register removes the need to use a critical section. */
-    if(uxLED == mainCHECK_LED)
-    {
-      uxLEDBit = 8 << uxLED;
-      LATCINV = uxLEDBit;  
-    }
-    else
-    {
-      uxLEDBit = 1 << uxLED;
-	  LATDINV = uxLEDBit;  
+void vParTestToggleLED( UBaseType_t uxLED ) {
+
+switch (uxLED) {
+        case 0:
+            LATDbits.LATD1 = !LATDbits.LATD1;
+            break;
+        case 1:
+            LATDbits.LATD3 = !LATDbits.LATD3;
+            break;
+        case 2:
+            LATCbits.LATC3 = !LATCbits.LATC3;
+            break;
+        case 3:
+            LATCbits.LATC13 = !LATCbits.LATC13;
+            break;
+        case 4:
+            LATCbits.LATC15 = !LATCbits.LATC15;
+            break;
+        default:
+            break;
     }
 }
+
 
 
 
